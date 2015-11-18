@@ -26,12 +26,24 @@ define(function (require) {
     calendarMesh.position.z = -7;
     calendarMesh.position.y = 0;
     calendarMesh.position.x = 0;
+    
+    //create road
+    var roadGeometry = new THREE.PlaneGeometry(200, 5);
+    var roadMaterial = new THREE.MeshPhongMaterial({
+        color: 0x333333
+    });
+    var roadMesh = new THREE.Mesh(roadGeometry, roadMaterial);
+    roadMesh.position.z = -8
+    roadMesh.position.y = -5;
+    roadMesh.rotation.x =  -Math.PI/2;
+    window.roadMesh = roadMesh;
+    scene.add(roadMesh);
 
     var renderer = new THREE.WebGLRenderer({
         canvas: document.getElementById("calendar"),
         alpha : true
     });
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight-3);
 
 
     function createDoor(number) {
