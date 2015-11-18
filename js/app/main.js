@@ -18,7 +18,7 @@ define(function (require) {
 
     var calendarGeometry = new THREE.BoxGeometry(5, 8, 1);
     var calendarMaterial = new THREE.MeshPhongMaterial({
-        color: 0xff00000
+        map: THREE.ImageUtils.loadTexture('../../image/bricks.jpg')
     });
     var calendarMesh = new THREE.Mesh(calendarGeometry, calendarMaterial);
     scene.add(calendarMesh);
@@ -26,7 +26,7 @@ define(function (require) {
     calendarMesh.position.z = -7;
     calendarMesh.position.y = 0;
     calendarMesh.position.x = 0;
-    
+
     //create road
     var roadGeometry = new THREE.PlaneGeometry(200, 5);
     var roadMaterial = new THREE.MeshPhongMaterial({
@@ -35,15 +35,15 @@ define(function (require) {
     var roadMesh = new THREE.Mesh(roadGeometry, roadMaterial);
     roadMesh.position.z = -8
     roadMesh.position.y = -5;
-    roadMesh.rotation.x =  -Math.PI/2;
+    roadMesh.rotation.x = -Math.PI / 2;
     window.roadMesh = roadMesh;
     scene.add(roadMesh);
 
     var renderer = new THREE.WebGLRenderer({
         canvas: document.getElementById("calendar"),
-        alpha : true
+        alpha: true
     });
-    renderer.setSize(window.innerWidth, window.innerHeight-3);
+    renderer.setSize(window.innerWidth, window.innerHeight - 3);
 
 
     function createDoor(number) {
@@ -51,7 +51,7 @@ define(function (require) {
         var doorMaterial = new THREE.MeshPhongMaterial({
             color: 0x00ff000
         });
-        var doorMesh = new THREE.Mesh(doorGeometry, doorMaterial);
+        var doorMesh = new THREE.Mesh(doorGeometry, window.doorMaterial);
         scene.add(doorMesh);
         doorMesh.position.z = -6;
         doorMesh.position.y = 2 - Math.floor((number - 1) / 4)
@@ -61,15 +61,47 @@ define(function (require) {
         return doorMesh;
     }
 
-    createDoor(1);
-
-    for (var i = 1; i < 25; i++) {
-        doors[i] = createDoor(i);
 
 
 
-        renderer.render(scene, camera);
-    }
+    //Loading texures
+
+    var loader = new THREE.TextureLoader();
+
+    loader.load(
+        // resource URL
+        'image/shutters.jpg',
+        // Function when resource is loaded
+        function (texture) {
+            // do something with the texture
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(2, 1)
+            var material = new THREE.MeshPhongMaterial({
+                map: texture,
+
+            });
+
+            window.doorMaterial = material;
+            renderer.render(scene, camera);
+            for (var i = 1; i < 25; i++) {
+                doors[i] = createDoor(i);
+
+
+
+                renderer.render(scene, camera);
+            }
+        },
+        // Function called when download progresses
+        function (xhr) {
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+        },
+        // Function called when download errors
+        function (xhr) {
+            console.log('An error happened');
+        }
+    );
+
+
 
 
     renderer.render(scene, camera);
@@ -88,5 +120,64 @@ define(function (require) {
             });
         }
     }
+
+    // load a resource
+    loader.load(
+        // resource URL
+        'image/bricks.jpg',
+        // Function when resource is loaded
+        function (texture) {
+            // do something with the texture
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(2, 3)
+            var material = new THREE.MeshPhongMaterial({
+                map: texture,
+
+            });
+
+            calendarMesh.material = material;
+            renderer.render(scene, camera);
+        },
+        // Function called when download progresses
+        function (xhr) {
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+        },
+        // Function called when download errors
+        function (xhr) {
+            console.log('An error happened');
+        }
+    );
+
+
+    loader.load(
+        // resource URL
+        'image/cobbles.jpg',
+        // Function when resource is loaded
+        function (texture) {
+            // do something with the texture
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(60, 7.5)
+            var material = new THREE.MeshPhongMaterial({
+                map: texture,
+
+            });
+
+            roadMesh.material = material;
+            renderer.render(scene, camera);
+        },
+        // Function called when download progresses
+        function (xhr) {
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+        },
+        // Function called when download errors
+        function (xhr) {
+            console.log('An error happened');
+        }
+    );
+
+
+
+
+
 
 });
