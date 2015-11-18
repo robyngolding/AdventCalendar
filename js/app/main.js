@@ -28,7 +28,8 @@ define(function (require) {
     calendarMesh.position.x = 0;
 
     var renderer = new THREE.WebGLRenderer({
-        canvas: document.getElementById("calendar")
+        canvas: document.getElementById("calendar"),
+        alpha : true
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
 

@@ -1,0 +1,19 @@
+#container
+{
+    z-index: 0;
+    height: 100%;
+    min-width: 100%;
+    -webkit-filter: blur(7px);
+    -moz-filter: blur(7px);
+    -ms-filter: blur(7px);
+    -o-filter: blur(7px);
+    filter: blur(7px);
+    background-image: url(../image/snowfall.gif);
+    background-size: cover;
+    position: absolute;
+}
+canvas
+{
+    z-index:10;
+    position: relative;
+}
